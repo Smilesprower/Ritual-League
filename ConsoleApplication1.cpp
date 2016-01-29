@@ -30,6 +30,10 @@
 sf::Time deltaTime;
 sf::Clock myClock;
 
+sf::Texture tex;
+sf::Sprite spr;
+
+
 // Game Modes
 //////////////////
 const byte MAINMENU = 0, GAME = 1, OPTIONS = 2, SCORE = 3, GAMEOVER = 4, DISCONNECTED = 5;
@@ -40,6 +44,8 @@ byte gameMode = MAINMENU;
 void Init()
 {
 	// Initialise shtuff
+	// Check that assets are been loaded
+	tex.loadFromFile("resources/controls.png");
 }
 
 void LoadContent()
