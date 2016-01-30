@@ -1,8 +1,11 @@
 /*
-This game is built for fun in a rushed enviroment
-No effort at all was giving 
+FINISH ANIMATIONSSSSSSSSSSSSSSSSSSSSSSSSS - Jay
+SOUNDFX - class ppls
+SPLASH SCREENS - Darren
+RESET GAME ETC - Who ever
 
 */
+
 
 
 

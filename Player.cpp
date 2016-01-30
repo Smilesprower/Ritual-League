@@ -14,11 +14,17 @@ m_spr(p_spr)
 	m_doubleJump = true;
 	m_shoot = true;
 	m_fire = false;
-	m_cState = m_GROUNDRIGHT;
-	m_spr.setTextureRect(sf::IntRect(0, m_SIZE * m_pNum, m_SIZE, m_SIZE));
+
 	m_spr.setPosition(m_position);
+	m_spr.scale(1,1);
 	m_counter = 0;
 	m_lives = 3;
+	if (p_pNum == 0)
+		m_yOffset = m_RIGHT;
+	else
+		m_yOffset = m_LEFT;
+
+	m_xOffset = 0;
 
 }
 
@@ -39,7 +45,7 @@ void Player::Update(float p_deltaTime, sf::Vector2f p_leftStick, float leftStick
 	// Drawing Purposes
 	////////////////////////////////
 	m_position += m_velocity;
-	m_collisionBox = sf::IntRect(m_position.x, m_position.y, m_SIZE, m_SIZE);
+	m_collisionBox = sf::IntRect(m_position.x, m_position.y, 30, 36);
 
 
 	if (p_buttons.at(1) && !p_buttons.at(11) && m_shoot)
@@ -50,6 +56,12 @@ void Player::Update(float p_deltaTime, sf::Vector2f p_leftStick, float leftStick
 
 
 	m_velocity.x = p_leftStick.x * p_deltaTime * 5;
+	if (m_velocity.x > 0)
+		m_yOffset = 1;
+	else if (m_velocity.x < 0)
+		m_yOffset = 0;
+
+
 
 	if (p_buttons.at(0) && !p_buttons.at(10) && m_doubleJump && m_touchingWall && m_hasJumped && m_prevPosition.y >= m_position.y)
 	{
@@ -64,6 +76,7 @@ void Player::Update(float p_deltaTime, sf::Vector2f p_leftStick, float leftStick
 	{
 		m_velocity.y -= 10;
 		m_hasJumped = true;
+		m_xOffset = 1;
 
 		//std::list<int> x;
 	}
@@ -79,6 +92,7 @@ void Player::Update(float p_deltaTime, sf::Vector2f p_leftStick, float leftStick
 		m_hasJumped = false;
 		m_position.y = 450;
 		m_doubleJump = true;
+		m_xOffset = 0;
 	}
 
 	if (m_position.x < m_WALLSIZEA)
@@ -86,15 +100,15 @@ void Player::Update(float p_deltaTime, sf::Vector2f p_leftStick, float leftStick
 		m_position.x = m_WALLSIZEA;
 		m_touchingWall = true;
 	}
-	else if (m_position.x + m_SIZE > m_WALLSIZEB)
+	else if (m_position.x + 30 > m_WALLSIZEB)
 	{
-		m_position.x = m_WALLSIZEB - m_SIZE;
+		m_position.x = m_WALLSIZEB - 30;
 		m_touchingWall = true;
 	}
-	else if (m_position.x  < m_WALLSIZEB - m_SIZE || m_position.x + m_SIZE -1 > m_WALLSIZEA)
+	else if (m_position.x  < m_WALLSIZEB - 30 || m_position.x + 30 > m_WALLSIZEA)
 		m_touchingWall = false;
 
-	m_spr.setTextureRect(sf::IntRect(0, m_pNum * m_SIZE + m_pNum, m_SIZE, m_SIZE));
+	m_spr.setTextureRect(sf::IntRect(m_xOffset * 30 + m_xOffset, m_yOffset * 36 + m_yOffset, 30, 36));
 	m_spr.setPosition(m_position);
 
 	m_prevPosition.y = m_position.y;
