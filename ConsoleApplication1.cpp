@@ -24,17 +24,25 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <string>
-#include "P1Controls.h"
-#include "P2Controls.h"
+#include "Controller.h"
+#include "Player.h"
+
+
+std::vector<Player> players;
 
 sf::Time deltaTime;
 sf::Clock myClock;
 
+sf::Text text1, text2;
+std::vector<Controller> controllers;
+
+
 sf::Texture tex;
 sf::Sprite spr;
 
-sf::Text text1, text2;
 
+
+const int MAX = 2;
 
 // Game Modes
 //////////////////
@@ -45,6 +53,18 @@ byte gameMode = MAINMENU;
 
 void Init()
 {
+	tex.loadFromFile("resources/player.png");
+	spr.setTexture(tex);
+
+
+	// Vector of Controllers and Players
+	////////////////////////////
+	for (int i = 0; i < MAX; i++)
+	{
+		controllers.push_back(i);
+		Player player(sf::Vector2f(i * 400 + 100, 200), i, spr);
+		players.push_back(player);
+	}
 
 }
 
@@ -57,8 +77,14 @@ void LoadContent()
 
 void UpdateMainMenu()
 {
-		text1.setString(std::to_string(P1Controls::Instance().m_leftAnalogAngle));
-		text2.setString(std::to_string(P2Controls::Instance().m_leftAnalogAngle));
+	for (int i = 0; i < MAX; i++)
+	{
+		controllers.at(i).Update();
+		players.at(i).Update(deltaTime.asSeconds(), controllers.at(i).GetLeftStickAxis(), controllers.at(i).GetLeftStickAngle());
+	}
+
+	text1.setString(std::to_string(controllers.at(0).GetLeftStickAxis().x));
+	text2.setString(std::to_string(controllers.at(0).GetLeftStickAngle()));
 }
 void UpdateGame()
 {
@@ -73,9 +99,6 @@ void Update()
 	deltaTime = myClock.getElapsedTime();
 	myClock.restart();
 
-
-	P1Controls::Instance().Update();
-	P2Controls::Instance().Update();
 	// Update Game Modes
 	/////////////////////////////
 	switch (gameMode)
@@ -94,12 +117,12 @@ void Update()
 
 void(DrawMainMenu(sf::RenderWindow &p_window))
 {
-	p_window.draw(spr);
-	p_window.draw(text1);
-	p_window.draw(text2);
+	for (int i = 0; i < MAX; i++)
+		p_window.draw(players.at(i).GetSprite());
 }
 void(DrawGame(sf::RenderWindow &p_window))
 {
+
 }
 void(DrawGameOver(sf::RenderWindow &p_window))
 {
