@@ -26,20 +26,19 @@
 #include <string>
 #include "Controller.h"
 #include "Player.h"
+#include "Level.h"
 
 
 std::vector<Player> players;
-
+Level level;
 sf::Time deltaTime;
 sf::Clock myClock;
-
 sf::Text text1, text2;
 std::vector<Controller> controllers;
 
 
-sf::Texture tex;
-sf::Sprite spr;
-
+sf::Texture tex, texLevel;
+sf::Sprite spr, sprLevel;
 
 
 const int MAX = 2;
@@ -57,15 +56,21 @@ void Init()
 	tex.setSmooth(true);
 	spr.setTexture(tex);
 
+	texLevel.loadFromFile("resources/level.png");
+	texLevel.setSmooth(true);
+	sprLevel.setTexture(texLevel);
 
 	// Vector of Controllers and Players
 	////////////////////////////
 	for (int i = 0; i < MAX; i++)
 	{
 		controllers.push_back(i);
-		Player player(sf::Vector2f(i * 400 + 100, 500), i, spr);
+		Player player(sf::Vector2f(i * 450 + 150, 450), i, spr);
 		players.push_back(player);
 	}
+
+	level.Init(sprLevel);
+
 
 }
 
@@ -89,17 +94,10 @@ void UpdateGame()
 	for (int i = 0; i < MAX; i++)
 	{
 		controllers.at(i).Update();
-		if (i == 0)
-			players.at(i).Update(deltaTime.asSeconds(), controllers.at(i).GetLeftStickAxis(), controllers.at(i).GetLeftStickAngle(), controllers.at(i).GetButtonsOne());
-		else
-			players.at(i).Update(deltaTime.asSeconds(), controllers.at(i).GetLeftStickAxis(), controllers.at(i).GetLeftStickAngle(), controllers.at(i).GetButtonsTwo());
 	}
 
-	if (controllers.at(0).GetButtonsOne().at(6))
-		text1.setString("A is pressed");
-	else
-		text1.setString("");
-
+	players.at(0).Update(deltaTime.asSeconds(), controllers.at(0).GetLeftStickAxis(), controllers.at(0).GetLeftStickAngle(), controllers.at(0).GetButtonsOne());
+	players.at(1).Update(deltaTime.asSeconds(), controllers.at(1).GetLeftStickAxis(), controllers.at(1).GetLeftStickAngle(), controllers.at(1).GetButtonsTwo());
 
 
 }
@@ -134,6 +132,8 @@ void(DrawMainMenu(sf::RenderWindow &p_window))
 }
 void(DrawGame(sf::RenderWindow &p_window))
 {
+	p_window.draw(level.GetSprite());
+
 	for (int i = 0; i < MAX; i++)
 		p_window.draw(players.at(i).GetSprite());
 
