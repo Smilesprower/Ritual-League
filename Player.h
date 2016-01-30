@@ -13,13 +13,16 @@ public:
 
 private:
 	sf::Sprite m_spr;
-	sf::Vector2f m_velocity, m_position;
+	sf::Vector2f m_velocity, m_position, m_prevPosition;
 
 
-	const int m_GROUND = 0, m_JUMPING = 1, m_FALLING = 2;
+	bool m_hasJumped;
+
+	const int m_GROUNDLEFT = 0, m_GROUNDRIGHT = 1, m_JUMPING = 2, m_FALLING = 3;
 	const int m_SIZE = 50;
 	int m_cState;
 	int m_pNum;
+	const float m_GRAVITY = 4000;
 	const int m_OFFSETBUTTONS = 10;
 
 };

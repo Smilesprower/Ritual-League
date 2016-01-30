@@ -62,7 +62,7 @@ void Init()
 	for (int i = 0; i < MAX; i++)
 	{
 		controllers.push_back(i);
-		Player player(sf::Vector2f(i * 400 + 100, 200), i, spr);
+		Player player(sf::Vector2f(i * 400 + 100, 500), i, spr);
 		players.push_back(player);
 	}
 
@@ -172,7 +172,8 @@ int main()
 	// Create the main window 
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
 
-
+	window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(60);
 	//load a font
 	sf::Font font;
 	font.loadFromFile("C:\\Windows\\Fonts\\GARA.TTF");
