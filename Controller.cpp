@@ -11,12 +11,13 @@ m_DEADZONEA(20),
 m_DEADZONEB(20)
 {
 	m_buttonCount = sf::Joystick::getButtonCount(m_joypadNum);
-	m_buttons = std::vector<bool>();
+	m_buttonsOne = std::vector<bool>();
+	m_buttonsTwo = std::vector<bool>();
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 20; i++)
 	{
-		m_buttons.push_back(false);
-		m_buttonsPrev.push_back(m_buttons.at(i));
+		m_buttonsOne.push_back(false);
+		m_buttonsTwo.push_back(false);
 	}
 }
 
@@ -29,12 +30,19 @@ void Controller::Update()
 
 	for (int i = 0; i < m_buttonCount; i++)
 	{
-		m_buttonsPrev.at(i) = m_buttons.at(i);
+		m_buttonsOne.at(i + offset) = m_buttonsOne.at(i);
+		m_buttonsTwo.at(i + offset) = m_buttonsTwo.at(i);
 
 		if (sf::Joystick::isButtonPressed(m_joypadNum, i))
-			m_buttons.at(i) = true;
+		{
+			m_buttonsOne.at(i) = true;
+			m_buttonsTwo.at(i) = true;
+		}
 		else
-			m_buttons.at(i) = false;
+		{
+			m_buttonsOne.at(i) = false;
+			m_buttonsTwo.at(i) = false;;
+		}
 	}
 
 	m_leftAnalogStick = sf::Vector2f(sf::Joystick::getAxisPosition(m_joypadNum, sf::Joystick::X), sf::Joystick::getAxisPosition(m_joypadNum, sf::Joystick::Y));
@@ -56,4 +64,14 @@ sf::Vector2f Controller::GetLeftStickAxis()
 float Controller::GetLeftStickAngle()
 {
 	return m_leftAnalogAngle;
+}
+
+std::vector<bool> Controller::GetButtonsOne()
+{
+	return m_buttonsOne;
+}
+
+std::vector<bool> Controller::GetButtonsTwo()
+{
+	return m_buttonsTwo;
 }

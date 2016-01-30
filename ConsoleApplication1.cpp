@@ -47,7 +47,7 @@ const int MAX = 2;
 // Game Modes
 //////////////////
 const byte MAINMENU = 0, GAME = 1, OPTIONS = 2, SCORE = 3, GAMEOVER = 4, DISCONNECTED = 5;
-byte gameMode = MAINMENU;
+byte gameMode = GAME;
 
 
 
@@ -77,19 +77,32 @@ void LoadContent()
 
 void UpdateMainMenu()
 {
-	for (int i = 0; i < MAX; i++)
-	{
-		controllers.at(i).Update();
-		players.at(i).Update(deltaTime.asSeconds(), controllers.at(i).GetLeftStickAxis(), controllers.at(i).GetLeftStickAngle());
-	}
 
-	text1.setString(std::to_string(controllers.at(0).GetLeftStickAxis().x));
-	text2.setString(std::to_string(controllers.at(0).GetLeftStickAngle()));
+
+
+
+
 }
 void UpdateGame()
 {
+	for (int i = 0; i < MAX; i++)
+	{
+		controllers.at(i).Update();
+		if (i == 0)
+			players.at(i).Update(deltaTime.asSeconds(), controllers.at(i).GetLeftStickAxis(), controllers.at(i).GetLeftStickAngle(), controllers.at(i).GetButtonsOne());
+		else
+			players.at(i).Update(deltaTime.asSeconds(), controllers.at(i).GetLeftStickAxis(), controllers.at(i).GetLeftStickAngle(), controllers.at(i).GetButtonsTwo());
+	}
+
+	if (controllers.at(0).GetButtonsOne().at(6))
+		text1.setString("A is pressed");
+	else
+		text1.setString("");
+
+
 
 }
+
 void UpdateGameOver()
 {
 
@@ -117,12 +130,13 @@ void Update()
 
 void(DrawMainMenu(sf::RenderWindow &p_window))
 {
-	for (int i = 0; i < MAX; i++)
-		p_window.draw(players.at(i).GetSprite());
 }
 void(DrawGame(sf::RenderWindow &p_window))
 {
+	for (int i = 0; i < MAX; i++)
+		p_window.draw(players.at(i).GetSprite());
 
+	p_window.draw(text1);
 }
 void(DrawGameOver(sf::RenderWindow &p_window))
 {
