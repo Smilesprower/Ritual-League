@@ -54,6 +54,7 @@ byte gameMode = GAME;
 void Init()
 {
 	tex.loadFromFile("resources/player.png");
+	tex.setSmooth(true);
 	spr.setTexture(tex);
 
 
@@ -173,7 +174,6 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
 
 	window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(60);
 	//load a font
 	sf::Font font;
 	font.loadFromFile("C:\\Windows\\Fonts\\GARA.TTF");
