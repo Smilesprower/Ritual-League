@@ -12,17 +12,41 @@ m_spr(p_spr)
 	m_touchingWall = false;
 	m_hasJumped = false;
 	m_doubleJump = true;
+	m_shoot = true;
+	m_fire = false;
 	m_cState = m_GROUNDRIGHT;
 	m_spr.setTextureRect(sf::IntRect(0, m_SIZE * m_pNum, m_SIZE, m_SIZE));
 	m_spr.setPosition(m_position);
+	m_counter = 0;
+	m_lives = 3;
+
 }
 
 void Player::Update(float p_deltaTime, sf::Vector2f p_leftStick, float leftStickAngle, std::vector<bool>p_buttons)
 {
+
+	if (!m_shoot)
+	{
+		m_counter++;
+		if (m_counter == 50)
+		{
+			m_shoot = true;
+			m_counter = 0;
+		}
+	}
+
+
 	// Drawing Purposes
 	////////////////////////////////
 	m_position += m_velocity;
 	m_collisionBox = sf::IntRect(m_position.x, m_position.y, m_SIZE, m_SIZE);
+
+
+	if (p_buttons.at(1) && !p_buttons.at(11) && m_shoot)
+	{
+		m_shoot = false;
+		m_fire = true;
+	}
 
 
 	m_velocity.x = p_leftStick.x * p_deltaTime * 5;
@@ -67,7 +91,7 @@ void Player::Update(float p_deltaTime, sf::Vector2f p_leftStick, float leftStick
 		m_position.x = m_WALLSIZEB - m_SIZE;
 		m_touchingWall = true;
 	}
-	else if (m_position.x < m_WALLSIZEB - m_SIZE || m_position.x > m_WALLSIZEA)
+	else if (m_position.x  < m_WALLSIZEB - m_SIZE || m_position.x + m_SIZE -1 > m_WALLSIZEA)
 		m_touchingWall = false;
 
 	m_spr.setTextureRect(sf::IntRect(0, m_pNum * m_SIZE + m_pNum, m_SIZE, m_SIZE));
@@ -90,5 +114,26 @@ void Player::setPosition(float p_positionX)
 {
 	m_position.x = p_positionX;
 	m_spr.setPosition(m_position.x, m_position.y);
+}
+
+bool Player::GetFire()
+{
+	return m_fire;
+}
+
+
+void Player::SetFire(bool p_fire)
+{
+	m_fire = p_fire;
+}
+
+bool Player::GetLives()
+{
+	return m_lives;
+}
+
+void Player::SetLives(int p_lives)
+{
+	m_lives = p_lives;
 }
 

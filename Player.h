@@ -12,6 +12,12 @@ public:
 	sf::Sprite GetSprite();
 	sf::IntRect GetCollision();
 	void setPosition(float p_positionX);
+	bool GetFire();
+	void SetFire(bool p_fire);
+
+	bool GetLives();
+	void SetLives(int p_lives);
+
 
 private:
 	sf::Sprite m_spr;
@@ -28,6 +34,11 @@ private:
 	const int m_OFFSETBUTTONS = 10;
 	bool m_doubleJump;
 	bool m_touchingWall;
+
+	int m_counter;
+	bool m_fire;
+	bool m_shoot;
+	int m_lives;
 
 };
 
